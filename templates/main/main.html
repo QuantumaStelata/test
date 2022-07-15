@@ -22,35 +22,49 @@
             placeholder: "Choose a selection",
         })
 
-        $.ajax({
-            url: "{% url 'api:term-list' %}",
-            method: "GET",
-            success: function(data) {
-                let terms = data.results
-                createOptions(terms, "#id_term")
-                setOptionFromUrl()
-            }
-        })
+        function getTerms() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "{% url 'api:term-list' %}",
+                    method: "GET",
+                    success: function(data) {
+                        let terms = data.results
+                        createOptions(terms, "#id_term")
+                        resolve(data)
+                    }
+                })
+            })
+        }
 
-        $.ajax({
-            url: "{% url 'api:brand-list' %}",
-            method: "GET",
-            success: function(data) {
-                let brands = data.results
-                createOptions(brands, "#id_brand")
-                setOptionFromUrl()
-            }
-        })
+        function getBrands() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "{% url 'api:brand-list' %}",
+                    method: "GET",
+                    success: function(data) {
+                        let brands = data.results
+                        createOptions(brands, "#id_brand")
+                        resolve(data)
+                    }
+                })
+            })
+        }
 
-        $.ajax({
-            url: "{% url 'api:style-list' %}",
-            method: "GET",
-            success: function(data) {
-                let styles = data.results
-                createOptions(styles, "#id_style")
-                setOptionFromUrl()
-            }
-        })
+        function getStyles() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "{% url 'api:style-list' %}",
+                    method: "GET",
+                    success: function(data) {
+                        let styles = data.results
+                        createOptions(styles, "#id_style")
+                        resolve(data)
+                    }
+                })
+            })
+        }
+        
+        Promise.all([getTerms(), getBrands(), getStyles()]).then(setOptionFromUrl)
 
         function createOptions(array, to_select) {
             $(to_select).html("")
@@ -71,33 +85,30 @@
 
         function setOptionFromUrl() {
             const params = new URLSearchParams(window.location.search)
+            
+            let term_slug = params.get('s') || ''
+            let brand_slug = params.get('b') || ''
+            let style_slug = params.get('st') || ''
 
-            if (params.has('s')) {
-                let term_slug = params.get('s')
+            $.ajax({
+                url: "{% url 'api:search' %}",
+                method: "GET",
+                data: {
+                    "s": term_slug,
+                    "b": brand_slug,
+                    "st": style_slug
+                },
+                success: function (data) {
+                    let select2_data = {
+                        width: "100%",
+                        placeholder: "Choose a selection",
+                    }
 
-                if (term_slug.length) {
-                    let term_id = $(`#id_term option[data-slug=${term_slug}]`).attr('value')
-                    $("#id_term").val(term_id)
+                    $("#id_term").val(data.term_id).select2(select2_data)
+                    $("#id_brand").val(data.brand_id).select2(select2_data)
+                    $("#id_style").val(data.style_id).select2(select2_data)
                 }
-            }
-
-            if (params.has('b')) {
-                let brand_slug = params.get('b')
-
-                if (brand_slug.length) {
-                    let brand_id = $(`#id_brand option[data-slug=${brand_slug}]`).attr('value')
-                    $("#id_brand").val(brand_id)
-                }
-            }
-
-            if (params.has('st')) {
-                let style_slug = params.get('st')
-
-                if (style_slug.length) {
-                    let style_id = $(`#id_style option[data-slug=${style_slug}]`).attr('value')
-                    $("#id_style").val(style_id)
-                }
-            }
+            })
         }
 
         $("#id_term, #id_brand, #id_style").change(function () {

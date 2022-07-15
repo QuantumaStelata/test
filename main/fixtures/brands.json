@@ -1,0 +1,42 @@
+[
+    {
+        "model": "main.Brand",
+        "pk": 1,
+        "fields": {
+            "name": "BMW",
+            "slug": "bmw"
+        }
+    },
+    {
+        "model": "main.Brand",
+        "pk": 2,
+        "fields": {
+            "name": "Mazda",
+            "slug": "mazda"
+        }
+    },
+    {
+        "model": "main.Brand",
+        "pk": 3,
+        "fields": {
+            "name": "Audi",
+            "slug": "audi"
+        }
+    },
+    {
+        "model": "main.Brand",
+        "pk": 4,
+        "fields": {
+            "name": "Renault",
+            "slug": "renault"
+        }
+    },
+    {
+        "model": "main.Brand",
+        "pk": 5,
+        "fields": {
+            "name": "Porshe",
+            "slug": "porshe"
+        }
+    }
+]

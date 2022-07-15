@@ -1,0 +1,42 @@
+[
+    {
+        "model": "main.Term",
+        "pk": 1,
+        "fields": {
+            "name": "3-D Wheels angles setting",
+            "slug": "3-d-wheels-angles-setting"
+        }
+    },
+    {
+        "model": "main.Term",
+        "pk": 2,
+        "fields": {
+            "name": "Repair of deafeners (of exhaust systems)",
+            "slug": "repair-of-deafeners-of-exhaust-system"
+        }
+    },
+    {
+        "model": "main.Term",
+        "pk": 3,
+        "fields": {
+            "name": "Replacement of clutch",
+            "slug": "replacement-of-clutch"
+        }
+    },
+    {
+        "model": "main.Term",
+        "pk": 4,
+        "fields": {
+            "name": "Charging of air-conditioner",
+            "slug": "charging-of-air-conditioner"
+        }
+    },
+    {
+        "model": "main.Term",
+        "pk": 5,
+        "fields": {
+            "name": "Repair of starter",
+            "slug": "repair-of-starter"
+        }
+    }
+]

@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container-fluide">
+        <div class="row m-5">
+            <div class="col-6 alert-success p-5">
+                <form>
+                    {% crispy form %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(() => {
+        $("#id_term, #id_brand, #id_style").select2({
+            width: "100%",
+            placeholder: "Choose a selection",
+        })
+
+        $.ajax({
+            url: "{% url 'api:term-list' %}",
+            method: "GET",
+            success: function(data) {
+                let terms = data.results
+                createOptions(terms, "#id_term")
+                setOptionFromUrl()
+            }
+        })
+
+        $.ajax({
+            url: "{% url 'api:brand-list' %}",
+            method: "GET",
+            success: function(data) {
+                let brands = data.results
+                createOptions(brands, "#id_brand")
+                setOptionFromUrl()
+            }
+        })
+
+        $.ajax({
+            url: "{% url 'api:style-list' %}",
+            method: "GET",
+            success: function(data) {
+                let styles = data.results
+                createOptions(styles, "#id_style")
+                setOptionFromUrl()
+            }
+        })
+
+        function createOptions(array, to_select) {
+            $(to_select).html("")
+
+            $("<option/>", {
+                value: "",
+                text: ""
+            }).appendTo(to_select)
+
+            for (let item of array) {
+                $("<option/>", {
+                    value: item.id,
+                    text: item.name,
+                    "data-slug": item.slug
+                }).appendTo(to_select)
+            }
+        }
+
+        function setOptionFromUrl() {
+            const params = new URLSearchParams(window.location.search)
+
+            if (params.has('s')) {
+                let term_slug = params.get('s')
+
+                if (term_slug.length) {
+                    let term_id = $(`#id_term option[data-slug=${term_slug}]`).attr('value')
+                    $("#id_term").val(term_id)
+                }
+            }
+
+            if (params.has('b')) {
+                let brand_slug = params.get('b')
+
+                if (brand_slug.length) {
+                    let brand_id = $(`#id_brand option[data-slug=${brand_slug}]`).attr('value')
+                    $("#id_brand").val(brand_id)
+                }
+            }
+
+            if (params.has('st')) {
+                let style_slug = params.get('st')
+
+                if (style_slug.length) {
+                    let style_id = $(`#id_style option[data-slug=${style_slug}]`).attr('value')
+                    $("#id_style").val(style_id)
+                }
+            }
+        }
+
+        $("#id_term, #id_brand, #id_style").change(function () {
+            let term = $("#id_term").children(`[value='${$("#id_term").val()}']`).attr('data-slug') || ''
+            let brand = $("#id_brand").children(`[value='${$("#id_brand").val()}']`).attr('data-slug') || ''
+            let style = $("#id_style").children(`[value='${$("#id_style").val()}']`).attr('data-slug') || ''
+
+            let url = "{% url 'main:main' %}" + `?s=${term}&b=${brand}&st=${style}`
+
+            window.location.href = url
+        })
+    })
+</script>
+{% endblock %}

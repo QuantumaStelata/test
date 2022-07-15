@@ -8,9 +8,9 @@
         pip3 install -r requirements.txt
 
 ## Проведите миграцию базы данных
-        python manage.py migrate
+        python3 manage.py migrate
 
 ## Запишите тестовые данные в базу данных, либо используйте свои данные
-        python manage.py loaddata terms
-        python manage.py loaddata brands
-        python manage.py loaddata styles
+        python3 manage.py loaddata terms
+        python3 manage.py loaddata brands
+        python3 manage.py loaddata styles

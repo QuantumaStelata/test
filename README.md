@@ -1,5 +1,5 @@
 ## Установите виртуальное окружение
-        python -m venv venv
+        python3 -m venv venv
 
 ## Активируйте виртуальное окружение
         .\venv\Script\activate

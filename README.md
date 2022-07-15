@@ -14,3 +14,6 @@
         python3 manage.py loaddata terms
         python3 manage.py loaddata brands
         python3 manage.py loaddata styles
+
+## Запустите сервер
+        python3 manage.py runserver
